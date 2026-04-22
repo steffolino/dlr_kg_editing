@@ -1,0 +1,30 @@
+[
+    {
+        "id": "USR-001",
+        "name": "Dr. Maria Santos",
+        "role": "domain-expert",
+        "email": "m.santos@example-institute.org",
+        "initials": "MS"
+    },
+    {
+        "id": "USR-002",
+        "name": "Jan Müller",
+        "role": "curator",
+        "email": "j.mueller@example-institute.org",
+        "initials": "JM"
+    },
+    {
+        "id": "USR-003",
+        "name": "Dr. Priya Patel",
+        "role": "ontology-engineer",
+        "email": "p.patel@example-institute.org",
+        "initials": "PP"
+    },
+    {
+        "id": "USR-004",
+        "name": "Thomas Berg",
+        "role": "domain-expert",
+        "email": "t.berg@example-institute.org",
+        "initials": "TB"
+    }
+]

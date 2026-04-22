@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Nuxt build outputs
+.nuxt/
+.output/
+.nitro/
+dist/
+
+# Nuxt generated types
+.nuxt/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

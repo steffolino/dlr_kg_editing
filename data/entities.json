@@ -1,0 +1,245 @@
+[
+    {
+        "id": "MAT-001",
+        "type": "Material",
+        "label": "Recycled Polypropylene (PP-R)",
+        "status": "approved",
+        "ownerRole": "domain-expert",
+        "provenanceSource": "EcoDatabase 2023 Annual Report, section 4.2",
+        "lastReviewedAt": "2024-03-15",
+        "createdAt": "2023-11-20",
+        "lockedBy": null,
+        "fields": {
+            "materialCategory": "plastic",
+            "recyclingRate": 78,
+            "hazardClass": "low",
+            "allowedLifecyclePhase": [
+                "production",
+                "use",
+                "end-of-life"
+            ],
+            "confidence": "high",
+            "notes": "Post-consumer recycled PP. Suitable for non-food contact applications. Melt-flow index verified at 12 g/10 min."
+        },
+        "pendingChanges": null,
+        "reviewNotes": null
+    },
+    {
+        "id": "MAT-002",
+        "type": "Material",
+        "label": "Bio-based Polylactic Acid (PLA)",
+        "status": "pending-review",
+        "ownerRole": "domain-expert",
+        "provenanceSource": "NatureWorks Supplier Datasheet v2.1",
+        "lastReviewedAt": null,
+        "createdAt": "2024-01-08",
+        "lockedBy": null,
+        "fields": {
+            "materialCategory": "bio-based",
+            "recyclingRate": 52,
+            "hazardClass": "none",
+            "allowedLifecyclePhase": [
+                "production",
+                "use",
+                "end-of-life",
+                "remanufacturing"
+            ],
+            "confidence": "medium",
+            "notes": "Corn-starch derived PLA. Industrial compostability confirmed. Home compostability under review."
+        },
+        "pendingChanges": {
+            "recyclingRate": 61,
+            "notes": "Updated recycling rate based on 2024 Q1 pilot study at TH Köln facility. Home compostability confirmed under EN 13432.",
+            "confidence": "high"
+        },
+        "reviewNotes": null
+    },
+    {
+        "id": "MAT-003",
+        "type": "Material",
+        "label": "Carbon Fibre Reinforced Polymer (CFRP)",
+        "status": "draft",
+        "ownerRole": "domain-expert",
+        "provenanceSource": "Internal material database – to be confirmed",
+        "lastReviewedAt": null,
+        "createdAt": "2024-04-02",
+        "lockedBy": null,
+        "fields": {
+            "materialCategory": "composite",
+            "recyclingRate": 18,
+            "hazardClass": "medium",
+            "allowedLifecyclePhase": [
+                "production",
+                "use"
+            ],
+            "confidence": "low",
+            "notes": "Thermoset CFRP. Recycling via pyrolysis only; fibre quality degrades. End-of-life routing unclear."
+        },
+        "pendingChanges": null,
+        "reviewNotes": null
+    },
+    {
+        "id": "MAT-004",
+        "type": "Material",
+        "label": "Reclaimed Aluminium Alloy 6061",
+        "status": "approved",
+        "ownerRole": "domain-expert",
+        "provenanceSource": "Hydro ASA Secondary Aluminium Spec Sheet 2023",
+        "lastReviewedAt": "2024-02-10",
+        "createdAt": "2023-09-15",
+        "lockedBy": null,
+        "fields": {
+            "materialCategory": "metal",
+            "recyclingRate": 95,
+            "hazardClass": "none",
+            "allowedLifecyclePhase": [
+                "production",
+                "use",
+                "maintenance",
+                "end-of-life",
+                "remanufacturing"
+            ],
+            "confidence": "verified",
+            "notes": "Secondary aluminium from automotive scrap. Very high recycling efficiency. EAF process. LCA data available."
+        },
+        "pendingChanges": null,
+        "reviewNotes": null
+    },
+    {
+        "id": "MAT-005",
+        "type": "Material",
+        "label": "Brominated Flame Retardant Blend BR-X40",
+        "status": "rejected",
+        "ownerRole": "domain-expert",
+        "provenanceSource": "Supplier claim – unverified",
+        "lastReviewedAt": "2024-01-22",
+        "createdAt": "2023-12-10",
+        "lockedBy": null,
+        "fields": {
+            "materialCategory": "other",
+            "recyclingRate": 5,
+            "hazardClass": "critical",
+            "allowedLifecyclePhase": [
+                "production"
+            ],
+            "confidence": "low",
+            "notes": "Restricted substance under RoHS Directive. Use only with explicit regulatory exception."
+        },
+        "pendingChanges": null,
+        "reviewNotes": "Rejected: hazard classification requires independent third-party verification. Provenance source is insufficient. Please resubmit with a certified safety data sheet (SDS) reference."
+    },
+    {
+        "id": "COMP-001",
+        "type": "Component",
+        "label": "Battery Housing Module (BHM-48V)",
+        "status": "approved",
+        "ownerRole": "domain-expert",
+        "provenanceSource": "Engineering BOM v3.4 – Battery Systems Dept.",
+        "lastReviewedAt": "2024-03-01",
+        "createdAt": "2023-10-05",
+        "lockedBy": null,
+        "fields": {
+            "primaryMaterial": "MAT-001",
+            "assemblyProcess": "injection-moulding",
+            "weight": 1.42,
+            "unit": "kg",
+            "repairabilityScore": 7,
+            "confidence": "high",
+            "notes": "Housing uses PP-R shell with aluminium hinge bracket. Designed for disassembly (DfD) – 6 screws, no adhesives."
+        },
+        "pendingChanges": null,
+        "reviewNotes": null
+    },
+    {
+        "id": "COMP-002",
+        "type": "Component",
+        "label": "Thermal Insulation Panel TIP-12",
+        "status": "draft",
+        "ownerRole": "domain-expert",
+        "provenanceSource": "R&D prototype spec sheet – Rev 0.2",
+        "lastReviewedAt": null,
+        "createdAt": "2024-04-10",
+        "lockedBy": null,
+        "fields": {
+            "primaryMaterial": "MAT-002",
+            "assemblyProcess": "compression-moulding",
+            "weight": 0.38,
+            "unit": "kg",
+            "repairabilityScore": 4,
+            "confidence": "low",
+            "notes": "Prototype PLA-based panel. Not yet ready for production. Delamination risk under >80 °C."
+        },
+        "pendingChanges": null,
+        "reviewNotes": null
+    },
+    {
+        "id": "SUP-001",
+        "type": "SupplierStatement",
+        "label": "GreenCycle GmbH – Recycled Content Declaration Q1 2024",
+        "status": "pending-review",
+        "ownerRole": "domain-expert",
+        "provenanceSource": "GreenCycle GmbH Supplier Portal, document GC-2024-RCD-001",
+        "lastReviewedAt": null,
+        "createdAt": "2024-03-28",
+        "lockedBy": null,
+        "fields": {
+            "supplierName": "GreenCycle GmbH",
+            "claimType": "recycled-content",
+            "claimedValue": "82% post-consumer recycled content by weight",
+            "validUntil": "2025-03-31",
+            "verificationStatus": "self-declared",
+            "confidence": "medium",
+            "notes": "Annual self-declaration. Third-party audit scheduled for Q2 2024."
+        },
+        "pendingChanges": {
+            "verificationStatus": "third-party-verified",
+            "confidence": "high",
+            "notes": "Annual self-declaration. Third-party audit completed May 2024 (Intertek certificate IC-2024-5521)."
+        },
+        "reviewNotes": null
+    },
+    {
+        "id": "REC-001",
+        "type": "RecyclingProcess",
+        "label": "Mechanical PP Granulation Loop",
+        "status": "approved",
+        "ownerRole": "domain-expert",
+        "provenanceSource": "PlasticsEurope Technical Guideline MR-2022",
+        "lastReviewedAt": "2024-01-30",
+        "createdAt": "2023-08-12",
+        "lockedBy": null,
+        "fields": {
+            "targetMaterial": "MAT-001",
+            "processType": "mechanical",
+            "efficiency": 78,
+            "certificationBody": "Recyclass",
+            "outputQuality": "good",
+            "confidence": "high",
+            "notes": "Closed-loop granulation. Suitable for bottles, automotive parts. Up to 3 cycles without significant property loss."
+        },
+        "pendingChanges": null,
+        "reviewNotes": null
+    },
+    {
+        "id": "EVD-001",
+        "type": "EvidenceDocument",
+        "label": "TÜV Rheinland – ISO 14001 Environmental Certificate 2024",
+        "status": "approved",
+        "ownerRole": "curator",
+        "provenanceSource": "TÜV Rheinland Certificate Portal – Cert. no. DE-EMS-24-88312",
+        "lastReviewedAt": "2024-04-01",
+        "createdAt": "2024-01-15",
+        "lockedBy": null,
+        "fields": {
+            "documentType": "certification",
+            "issuer": "TÜV Rheinland GmbH",
+            "issuedAt": "2024-01-10",
+            "expiresAt": "2027-01-09",
+            "coverageScope": "MAT-001, MAT-004, REC-001",
+            "confidence": "verified",
+            "notes": "Covers environmental management for recycled materials production site in Leverkusen."
+        },
+        "pendingChanges": null,
+        "reviewNotes": null
+    }
+]
