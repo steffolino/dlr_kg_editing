@@ -30,6 +30,7 @@ export default defineNuxtConfig({
 
   // Nielsen H1: always surface system status – use page transitions to confirm navigation
   app: {
+    baseURL: process.env.NUXT_APP_BASE_URL || '/',
     pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       titleTemplate: '%s | KG Editor',
