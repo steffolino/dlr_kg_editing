@@ -65,6 +65,13 @@ const roleDescriptions: Record<string, string> = {
   'curator': 'You can review pending changes, approve or reject them, and lock records.',
   'ontology-engineer': 'You have full access including shape/config management.'
 }
+
+const uxHelperContext = 'This dashboard helps users orient themselves quickly, see current workload, and jump to their next high-value task by role.'
+const uxHelperHeuristics = [
+  { id: 'H1', label: 'Visibility of system status', reason: 'Summary cards and open task counts keep system state visible at a glance.' },
+  { id: 'H6', label: 'Recognition rather than recall', reason: 'Role, tasks, and status labels are always visible so users do not need to remember context.' },
+  { id: 'H7', label: 'Flexibility and efficiency', reason: 'Quick links and persona shortcuts reduce navigation effort for frequent actions.' }
+]
 </script>
 
 <template>
@@ -102,6 +109,20 @@ const roleDescriptions: Record<string, string> = {
         </button>
       </div>
     </div>
+
+    <UxHelper
+      title="Dashboard context"
+      :page-context="uxHelperContext"
+      :heuristics="uxHelperHeuristics"
+    />
+
+    <GraphOverviewCard
+      :entities="entities"
+      :focal-id="openTasks[0]?.id ?? entities[0]?.id ?? null"
+      title="Graph visual"
+      variant="sunset"
+      :prefer-connected-focal="true"
+    />
 
     <!-- Summary cards (Nielsen H1) -->
     <section aria-labelledby="summary-heading">

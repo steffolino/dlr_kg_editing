@@ -22,6 +22,8 @@ const { data, refresh } = await useFetch<{ data: Entity[] }>('/api/entities', {
   query: { status: 'pending-review' }
 })
 const queue = computed(() => data.value?.data ?? [])
+const { data: allEntitiesData } = await useFetch<{ data: Entity[] }>('/api/entities')
+const allEntities = computed(() => allEntitiesData.value?.data ?? [])
 
 // Active entity from URL param or first in queue
 const activeId = ref<string | null>((route.query.entity as string) ?? null)
@@ -64,6 +66,13 @@ function onDecision(updated: Entity): void {
     }
   })
 }
+
+const uxHelperContext = 'This page helps curators evaluate pending changes by selecting one queued record and reviewing field-level differences before deciding.'
+const uxHelperHeuristics = [
+  { id: 'H1', label: 'Visibility of system status', reason: 'Queue size and active selection make review workload and focus explicit.' },
+  { id: 'H6', label: 'Recognition rather than recall', reason: 'Diff panels show what changed directly, so reviewers do not need to remember previous values.' },
+  { id: 'H2', label: 'Match between system and real world', reason: 'Language like review queue, approve, and reject mirrors real editorial workflows.' }
+]
 </script>
 
 <template>
@@ -76,6 +85,19 @@ function onDecision(updated: Entity): void {
         {{ queue.length }} record{{ queue.length !== 1 ? 's' : '' }} awaiting curator review.
       </p>
     </div>
+
+    <UxHelper
+      title="Review queue context"
+      :page-context="uxHelperContext"
+      :heuristics="uxHelperHeuristics"
+    />
+
+    <GraphOverviewCard
+      :entities="allEntities"
+      :focal-id="activeEntity?.id ?? queue[0]?.id ?? null"
+      title="Graph visual"
+      variant="forest"
+    />
 
     <!-- Role warning -->
     <div

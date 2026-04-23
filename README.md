@@ -1,130 +1,103 @@
-# KG Editor – PoC
+# KG Editor - PoC
 
 A low-barrier, role-based knowledge graph editing tool for domain experts, built as a proof-of-concept for a research-institute interview.
 
 ## What it demonstrates
 
-- **Role-based editing** of a circularity / materials / supply-chain knowledge graph
-- **Low-barrier UX** for domain experts who are not familiar with RDF, SPARQL, or SHACL
-- All **10 Nielsen usability heuristics** explicitly implemented and documented
-- SHACL-inspired constraint validation (client- and server-side) from plain JSON config
-- Spreadsheet-like editor hybrid with grouped fields, inline validation, draft saving
-- Review workflow: Domain Expert → submit → Curator approve/reject → audit trail
+- Role-based editing of a circularity/materials/supply-chain knowledge graph
+- Low-barrier UX for users who are not familiar with RDF, SPARQL, or SHACL
+- Nielsen heuristic-driven design, including page-level UX helper explanations
+- SHACL-inspired constraint validation on client and server from plain JSON config
+- Graph previews across core pages and detail contexts (1-hop and connected modes)
+- Lightweight in-app feedback capture linked to page context and referenced records
 
 ## Tech stack
 
 | Layer | Choice |
-|-------|--------|
-| Framework | Nuxt 3 (Nuxt 4 compatibility mode) + Vue 3 Composition API |
-| Language | TypeScript (strict, no `any`) |
+| --- | --- |
+| Framework | Nuxt 3 (Nuxt 4 compatibility mode) + Vue 3 |
+| Language | TypeScript |
 | Styling | Tailwind CSS + `@tailwindcss/forms` |
-| State | `useState` (Nuxt) + `localStorage` for draft persistence |
+| State | Nuxt composables + `localStorage` for drafts/feedback |
 | Backend | Nitro server routes + in-memory store (no database) |
-| Data | Local JSON files (`data/`) loaded once on server start |
+| Data | Local JSON files in `data/` |
 
 ## Quick start
 
 ```bash
-# 1. Install dependencies
 npm install
-
-# 2. Start the dev server
 npm run dev
-
-# 3. Open http://localhost:3000
 ```
 
-The app auto-selects **Dr. Maria Santos (Domain Expert)** on first load.  
-Use the **persona switcher** in the header to switch between roles.
+Open `http://localhost:3000`.
 
-## Demo scenarios
+## Main pages
 
-| # | Scenario | How to demo |
-|---|----------|-------------|
-| 1 | Domain expert edits a permitted field | Switch to Dr. Maria Santos → open MAT-003 → change Recycling Rate → Save draft |
-| 2 | Domain expert tries to edit a locked field | Open any Material as Domain Expert → try editing "Allowed Lifecycle Phases" (locked icon appears with explanation) |
-| 3 | Invalid input triggers inline validation | Open MAT-003 → enter `150` in Recycling Rate → click outside field → error appears |
-| 4 | Submit for review | Edit MAT-003 as Domain Expert → Save draft → Submit for review |
-| 5 | Curator reviews changes | Switch to Jan Müller (Curator) → open Review queue → review MAT-002 or SUP-001 → approve or reject |
-| 6 | Admin inspects shape constraints | Switch to Dr. Priya Patel (Ontology Engineer) → open Shape inspector |
+- `/` Dashboard with workload/status overview, graph visual, and glossary
+- `/entities` Record list with filters, table actions, and graph visual
+- `/entities/:id` Record detail/editor with status controls, audit, and scoped graph view
+- `/review` Curator review queue with diff panel and graph context
+- `/admin/shapes` Shape/constraint inspector and graph context
+- `/admin/feedback` Feedback inbox for collected user comments
 
-## Project structure
+## New UX additions
 
-```
-├── app.vue                        # Root layout shell
-├── nuxt.config.ts
-├── tailwind.config.ts
-├── types/index.ts                 # All shared TypeScript types
-│
-├── data/                          # Static JSON data (loaded by server)
-│   ├── entities.json              # 10 example entities across 5 types
-│   ├── shapes.json                # SHACL-inspired field constraint config
-│   ├── users.json                 # 4 demo users / personas
-│   ├── permissions.json           # Per-role permission flags
-│   ├── relations.json             # KG edges between entities
-│   └── audit-log.json            # Historical audit entries
-│
-├── server/
-│   ├── utils/store.ts             # In-memory store + server-side validation
-│   └── api/
-│       ├── entities.get.ts        # GET /api/entities?type=&status=&q=
-│       ├── entities/[id].get.ts   # GET /api/entities/:id
-│       ├── entities/[id].patch.ts # PATCH /api/entities/:id
-│       ├── entities/[id].lock.post.ts
-│       ├── review/submit.post.ts  # POST /api/review/submit
-│       ├── review/decision.post.ts# POST /api/review/decision
-│       ├── shapes.get.ts          # GET /api/shapes
-│       └── users.get.ts           # GET /api/users
-│
-├── composables/
-│   ├── useAuth.ts                 # Current user + role switching
-│   ├── useValidation.ts           # Client-side field validation
-│   └── usePermissions.ts         # Role-based permission checks
-│
-├── components/
-│   ├── layout/
-│   │   ├── AppHeader.vue          # Top nav + role switcher
-│   │   └── StatusBadge.vue        # Reusable status chip
-│   ├── editor/
-│   │   ├── RecordEditor.vue       # Main editing form
-│   │   ├── FieldRenderer.vue      # Single field (all datatypes)
-│   │   └── ValidationSummary.vue  # Error list with field links
-│   └── review/
-│       └── ReviewDiffPanel.vue    # Old vs new value comparison
-│
-├── pages/
-│   ├── index.vue                  # Dashboard
-│   ├── entities/
-│   │   ├── index.vue              # Record list with filters
-│   │   └── [id].vue               # Record detail editor
-│   ├── review/index.vue           # Review queue
-│   └── admin/shapes.vue           # Shape / constraint inspector
-│
-└── docs/
-    ├── heuristics-mapping.md
-    ├── architecture.md
-    └── personas/
-        ├── domain-expert.md
-        └── curator.md
-```
+### Graph preview card
 
-## Roles
+- Available on core pages with page-specific focus and style variant
+- Two modes:
+  - `1-hop`: direct neighbors around the focus node
+  - `Connected`: reachable subgraph within the currently loaded page dataset
+- Context note clarifies:
+  - which node is used as focus,
+  - whether it was page-provided or auto-selected,
+  - and the scope boundaries of the visualization.
 
-| Role | Can edit fields | Can submit | Can review | Can lock | Can edit shapes |
-|------|----------------|------------|------------|----------|----------------|
-| Domain Expert | Permitted fields only | ✓ | ✗ | ✗ | ✗ |
-| Curator | All fields | ✓ | ✓ | ✓ | ✗ |
-| Ontology Engineer | All fields | ✓ | ✓ | ✓ | ✓ |
+### UX helper panel
 
-## Key design decisions
+- Added to each main page behind a show/hide toggle
+- Explains page intent and primary Nielsen heuristics used
 
-- **No database** – all state lives in a Nitro module-level Map. Resets on server restart (intentional for a PoC/demo).
-- **No full SHACL** – constraints are defined in `data/shapes.json` as plain JSON and interpreted by `useValidation` and `server/utils/store.ts`.
-- **Draft persistence** – `localStorage` is used to keep unsaved edits across page refreshes within a browser session.
-- **Double validation** – client-side composable + server-side API route guard both validate against the same shape rules.
+### Feedback feature
 
-## Linting
+- Floating feedback widget to capture comments on:
+  - dataset quality/content,
+  - UI/interaction,
+  - workflow/process,
+  - bug/error reports,
+  - other suggestions
+- Entries store local metadata including:
+  - page path,
+  - optional referenced record ID,
+  - category and free-text message
+- Feedback inbox at `/admin/feedback` supports filtering and links back to context
+
+## Scripts
 
 ```bash
+npm run dev
+npm run build
+npm run generate
+npm run preview
 npm run lint
 ```
+
+## GitHub Pages deployment
+
+This repo includes a GitHub Actions workflow at `.github/workflows/deploy-pages.yml` that:
+
+1. installs dependencies,
+2. runs `npm run generate`,
+3. uploads `.output/public`,
+4. deploys to GitHub Pages.
+
+Base path is set automatically in CI:
+- `https://<user>.github.io/<repo>/` for project pages
+- `/` for `<user>.github.io` repositories
+
+See [docs/deployment.md](docs/deployment.md) for setup details and static-hosting limitations.
+
+## Notes
+
+- State is in-memory on server for this PoC and resets on server restart.
+- On static hosting (GitHub Pages), mutation APIs are not available; use it as a read/demo build.

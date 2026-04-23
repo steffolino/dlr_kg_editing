@@ -29,6 +29,8 @@ const entity = ref<Entity | null>(entityData.value?.data ?? null)
 const audit = ref<AuditEntry[]>(entityData.value?.audit ?? [])
 
 const { data: shapesData } = await useFetch<{ data: Shape[] }>('/api/shapes')
+const { data: allEntitiesData } = await useFetch<{ data: Entity[] }>('/api/entities')
+const allEntities = computed(() => allEntitiesData.value?.data ?? [])
 
 const shape = computed<Shape | null>(() => {
   if (!entity.value) return null
@@ -81,6 +83,13 @@ function extractMsg(err: unknown): string {
   if (err && typeof err === 'object' && 'message' in err) return String((err as { message: unknown }).message)
   return 'Unexpected error.'
 }
+
+const uxHelperContext = 'This detail page supports safe editing of a single record, with permission-aware fields, validation feedback, status controls, and audit context.'
+const uxHelperHeuristics = [
+  { id: 'H1', label: 'Visibility of system status', reason: 'Status chips, lock states, save feedback, and audit entries keep progress explicit.' },
+  { id: 'H3', label: 'User control and freedom', reason: 'Breadcrumbs, field resets, and discard actions make it easy to undo or change direction.' },
+  { id: 'H9', label: 'Help users recover from errors', reason: 'Validation and server-error messaging are designed to guide correction quickly.' }
+]
 </script>
 
 <template>
@@ -96,6 +105,12 @@ function extractMsg(err: unknown): string {
         <li class="text-slate-700 font-medium">{{ entity?.id ?? id }}</li>
       </ol>
     </nav>
+
+    <UxHelper
+      title="Record detail context"
+      :page-context="uxHelperContext"
+      :heuristics="uxHelperHeuristics"
+    />
 
     <!-- Not found -->
     <div v-if="entityError" class="rounded-lg border border-red-300 bg-red-50 p-6 text-sm text-red-800" role="alert">
@@ -162,6 +177,13 @@ function extractMsg(err: unknown): string {
               </button>
             </div>
           </div>
+
+          <GraphOverviewCard
+            :entities="allEntities"
+            :focal-id="entity.id"
+            title="Record graph view"
+            variant="teal"
+          />
 
           <!-- Curator review link if pending-review -->
           <div

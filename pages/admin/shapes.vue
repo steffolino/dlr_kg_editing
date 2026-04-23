@@ -11,13 +11,15 @@
  *              by default; details expandable on demand.
  * Nielsen H10 – Help and documentation: explains what each constraint means.
  */
-import type { Shape, FieldShape } from '~/types/index'
+import type { Shape, Entity } from '~/types/index'
 
 useHead({ title: 'Shape inspector' })
 
 const { canEditShapes } = usePermissions()
 const { data } = await useFetch<{ data: Shape[] }>('/api/shapes')
 const shapes = computed(() => data.value?.data ?? [])
+const { data: entitiesData } = await useFetch<{ data: Entity[] }>('/api/entities')
+const entities = computed(() => entitiesData.value?.data ?? [])
 
 const openTypes = ref<Set<string>>(new Set(['Material']))
 
@@ -57,12 +59,12 @@ function datatypeLabel(datatype: string): string {
   return map[datatype] ?? datatype
 }
 
-const constraintLabels: Record<string, string> = {
-  required: 'Required',
-  min: 'Minimum value',
-  max: 'Maximum value',
-  allowedValues: 'Allowed values'
-}
+const uxHelperContext = 'This inspector explains the shape constraints that drive field behavior, validation, and role-based editability across records.'
+const uxHelperHeuristics = [
+  { id: 'H6', label: 'Recognition rather than recall', reason: 'Constraint details are visible in one place, reducing the need to infer rules from code.' },
+  { id: 'H8', label: 'Aesthetic and minimalist design', reason: 'Collapsed-by-default sections reduce noise while keeping deep detail available on demand.' },
+  { id: 'H10', label: 'Help and documentation', reason: 'Terminology and constraints are explained directly on the page for non-technical users.' }
+]
 </script>
 
 <template>
@@ -76,6 +78,19 @@ const constraintLabels: Record<string, string> = {
         exist, what values they accept, and which roles may edit them.
       </p>
     </div>
+
+    <UxHelper
+      title="Shape inspector context"
+      :page-context="uxHelperContext"
+      :heuristics="uxHelperHeuristics"
+    />
+
+    <GraphOverviewCard
+      :entities="entities"
+      :focal-id="entities[0]?.id ?? null"
+      title="Graph visual"
+      variant="slate"
+    />
 
     <!-- Role notice -->
     <div

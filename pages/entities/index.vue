@@ -54,6 +54,13 @@ const hasActiveFilters = computed(
 const entityTypes: EntityType[] = ['Material', 'Component', 'SupplierStatement', 'RecyclingProcess', 'EvidenceDocument']
 const statusOptions: EntityStatus[] = ['draft', 'pending-review', 'approved', 'rejected', 'locked']
 const roleOptions: UserRole[] = ['domain-expert', 'curator', 'ontology-engineer']
+
+const uxHelperContext = 'This page is the working index for records. It helps users find the right entity fast using filters and then move to edit or review actions.'
+const uxHelperHeuristics = [
+  { id: 'H3', label: 'User control and freedom', reason: 'Active filters are visible and removable so users can recover from narrow searches immediately.' },
+  { id: 'H7', label: 'Flexibility and efficiency', reason: 'Combined filters and free-text search support both broad scanning and precise lookup.' },
+  { id: 'H1', label: 'Visibility of system status', reason: 'Result counts and loading states clarify what the system is doing.' }
+]
 </script>
 
 <template>
@@ -64,6 +71,19 @@ const roleOptions: UserRole[] = ['domain-expert', 'curator', 'ontology-engineer'
       <h1 class="text-2xl font-bold text-slate-900">Records</h1>
       <span class="text-sm text-slate-500">{{ entities.length }} result{{ entities.length !== 1 ? 's' : '' }}</span>
     </div>
+
+    <UxHelper
+      title="Records page context"
+      :page-context="uxHelperContext"
+      :heuristics="uxHelperHeuristics"
+    />
+
+    <GraphOverviewCard
+      :entities="entities"
+      :focal-id="entities[0]?.id ?? null"
+      title="Graph visual"
+      variant="ocean"
+    />
 
     <!-- Filter bar -->
     <div

@@ -43,7 +43,8 @@ const navLinks = [
   { to: '/', label: 'Dashboard' },
   { to: '/entities', label: 'Records' },
   { to: '/review', label: 'Review queue' },
-  { to: '/admin/shapes', label: 'Shape inspector' }
+  { to: '/admin/shapes', label: 'Shape inspector' },
+  { to: '/admin/feedback', label: 'Feedback inbox' }
 ]
 </script>
 

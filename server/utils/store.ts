@@ -11,7 +11,8 @@ import type {
   Shape,
   User,
   Permission,
-  FieldValue
+  FieldValue,
+  Relation
 } from '../../types/index'
 
 // ── Raw JSON imports ─────────────────────────────────────────────────────────
@@ -20,6 +21,7 @@ import auditRaw from '../../data/audit-log.json'
 import shapesRaw from '../../data/shapes.json'
 import usersRaw from '../../data/users.json'
 import permissionsRaw from '../../data/permissions.json'
+import relationsRaw from '../../data/relations.json'
 
 // ── Typed stores ─────────────────────────────────────────────────────────────
 
@@ -34,6 +36,7 @@ export const shapeStore: Shape[] = structuredClone(shapesRaw) as Shape[]
 export const userStore: User[] = structuredClone(usersRaw) as User[]
 
 export const permissionStore: Permission[] = structuredClone(permissionsRaw) as Permission[]
+export const relationStore: Relation[] = structuredClone(relationsRaw) as Relation[]
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -57,6 +60,13 @@ export function nextAuditId(): string {
 /** Returns the shape for a given entity type, or undefined. */
 export function shapeFor(entityType: string): Shape | undefined {
   return shapeStore.find((s) => s.entityType === entityType)
+}
+
+/** Returns all graph relations that touch the given entity id. */
+export function relationsForEntity(entityId: string): Relation[] {
+  return relationStore.filter(
+    (rel) => rel.sourceId === entityId || rel.targetId === entityId
+  )
 }
 
 /**
